@@ -13,13 +13,13 @@ export default function App() {
 
       <div className="flex gap-2">
         <button
-          className="btn rounded bg-green-500 px-2 text-white cursor-pointer"
+          className="btn cursor-pointer rounded bg-green-500 px-2 text-white"
           onClick={() => subscribe(1)}
         >
           Subscribe
         </button>
         <button
-          className="btn rounded bg-red-500 px-2 text-white cursor-pointer"
+          className="btn cursor-pointer rounded bg-red-500 px-2 text-white"
           onClick={() => unsubscribe(1)}
         >
           Unsubscribe
@@ -30,7 +30,7 @@ export default function App() {
       <ul>
         {commentary.map((c) => (
           <li key={c.id}>
-            {c.minutes}' - {c.message}
+            {c.minutes !== null ? `${c.minutes}' - ` : ""}+ {c.message}
           </li>
         ))}
       </ul>

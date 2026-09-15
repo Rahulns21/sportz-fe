@@ -10,12 +10,18 @@ export function useMatchSocket() {
   );
   const socketRef = useRef<WebSocket | null>(null);
 
-   const subscribe = useCallback((matchId: number) => {
-    socketRef.current?.send(JSON.stringify({ type: "subscribe", matchId }));
+  const subscribe = useCallback((matchId: number) => {
+    const ws = socketRef.current;
+    if (ws?.readyState === WebSocket.OPEN) {
+      ws.send(JSON.stringify({ type: "subscribe", matchId }));
+    }
   }, []);
 
   const unsubscribe = useCallback((matchId: number) => {
-    socketRef.current?.send(JSON.stringify({ type: "unsubscribe", matchId }));
+    const ws = socketRef.current;
+    if (ws?.readyState === WebSocket.OPEN) {
+      ws.send(JSON.stringify({ type: "unsubscribe", matchId }));
+    }
   }, []);
 
   useEffect(() => {
@@ -77,8 +83,13 @@ export function useMatchSocket() {
     };
 
     return () => {
+      ws.onopen = null;
+      ws.onclose = null;
+      ws.onmessage = null;
       ws.close();
-      socketRef.current = null;
+      if (socketRef.current === ws) {
+        socketRef.current = null;
+      }
     };
   }, []);
 

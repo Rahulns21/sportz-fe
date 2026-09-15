@@ -57,4 +57,4 @@ export const CommentaryResponseSchema = z.object({
 export type Match = z.infer<typeof matchSchema>;
 export type Commentary = z.infer<typeof commentarySchema>;
 export type MatchResponse = z.infer<typeof MatchResponseSchema>;
-export type CommentaryResponse = z.infer<typeof commentarySchema>;
+export type CommentaryResponse = z.infer<typeof CommentaryResponseSchema>;
