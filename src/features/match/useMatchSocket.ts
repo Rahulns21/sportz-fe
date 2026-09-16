@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { type Commentary, serverMessageSchema } from "../../types";
+import { type Commentary, type Match, serverMessageSchema } from "../../types";
 import { createSocket } from "../../lib/ws";
+import { fetchMatches } from "../../lib/api";
 
 export function useMatchSocket() {
+  const [matches, setMatches] = useState<Match[]>([]);
   const [connected, setConnected] = useState(false);
   const [commentary, setCommentary] = useState<Commentary[]>([]);
   const [subscribedMatches, setSubscribedMatches] = useState<Set<number>>(
@@ -25,8 +27,11 @@ export function useMatchSocket() {
   }, []);
 
   useEffect(() => {
+    fetchMatches().then((r) => setMatches(r.data)).catch(console.error);
+    
     const ws = createSocket();
     socketRef.current = ws;
+
 
     ws.onopen = () => setConnected(true);
     ws.onclose = () => setConnected(false);
@@ -73,7 +78,7 @@ export function useMatchSocket() {
           break;
 
         case "match_created":
-          // TODO: append to a matches list
+          setMatches((prev) => [...prev, msg.data]);
           break;
 
         case "error":
@@ -97,6 +102,7 @@ export function useMatchSocket() {
     connected,
     commentary,
     subscribedMatches,
+    matches,
     subscribe,
     unsubscribe,
   };
