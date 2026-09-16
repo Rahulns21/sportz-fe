@@ -1,8 +1,14 @@
 import { useMatchSocket } from "./features/match/useMatchSocket";
 
 export default function App() {
-  const { connected, commentary, subscribedMatches, subscribe, unsubscribe } =
-    useMatchSocket();
+  const {
+    connected,
+    commentary,
+    subscribedMatches,
+    matches,
+    subscribe,
+    unsubscribe,
+  } = useMatchSocket();
 
   return (
     <div style={{ padding: 20 }}>
@@ -26,14 +32,23 @@ export default function App() {
         </button>
       </div>
 
-      <h2>Live commentary</h2>
-      <ul>
-        {commentary.map((c) => (
-          <li key={c.id}>
-            {c.minutes !== null ? `${c.minutes}' - ` : ""}+ {c.message}
-          </li>
-        ))}
-      </ul>
+      <h2>Live commentary:</h2>
+      <div className="flex flex-col gap-5">
+        <ul>
+          {commentary.map((c) => (
+            <li key={c.id}>
+              {c.minutes !== null ? `${c.minutes}' - ` : ""} {c.message}
+            </li>
+          ))}
+        </ul>
+        <ol className="list-decimal list-inside">
+          {matches.map((m) => (
+            <li key={m.id}>
+              {m.homeTeam} vs {m.awayTeam}
+            </li>
+          ))}
+        </ol>
+      </div>
     </div>
   );
 }
