@@ -27,8 +27,14 @@ export function useMatchSocket() {
   }, []);
 
   useEffect(() => {
-    fetchMatches().then((r) => setMatches(r.data)).catch(console.error);
-    
+    fetchMatches().then((r) => {
+      setMatches((prev) => {
+        const seen = new Set(prev.map((m) => m.id));
+        const fromFetch = r.data.filter((m) => !seen.has(m.id));
+        return [...prev, ...fromFetch];
+      });
+    }).catch(console.error);
+
     const ws = createSocket();
     socketRef.current = ws;
 
