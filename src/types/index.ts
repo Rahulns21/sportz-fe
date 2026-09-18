@@ -42,6 +42,14 @@ export const serverMessageSchema = z.discriminatedUnion("type", [
         message: z.string(),
         matchId: z.number().optional(),
     }),
+    z.object({
+      type: z.literal("score_update"),
+      matchId: z.number(),
+      data: z.object({
+        homeScore: z.number(),
+        awayScore: z.number(),
+      }),
+    }),
 ]);
 
 export type ServerMessage = z.infer<typeof serverMessageSchema>;
