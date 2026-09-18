@@ -50,6 +50,11 @@ export function MatchCard({
         clearTimeout(pulseTimeoutRef.current.away);
       pulseTimeoutRef.current.away = setTimeout(() => setAwayPulse(false), 900);
     }
+
+    prevScoreRef.current = {
+      home: match.homeScore,
+      away: match.awayScore,
+    };
   }, [match.homeScore, match.awayScore]);
 
   const displayStatus =
