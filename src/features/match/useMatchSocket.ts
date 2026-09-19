@@ -19,7 +19,14 @@ export function useMatchSocket() {
   const activeMatchIdRef = useRef<number | null>(null);
   const desiredSubscriptions = useRef(new Set<number>());
   const pendingScoresRef = useRef<
-    Map<number, { homeScore: number; awayScore: number }>
+    Map<
+      number,
+      {
+        homeScore: number;
+        awayScore: number;
+        stats: Record<string, unknown> | null;
+      }
+    >
   >(new Map());
   const requestTokenRef = useRef(0);
 
@@ -126,7 +133,12 @@ export function useMatchSocket() {
             const buffered = pendingScoresRef.current.get(m.id);
             if (!buffered) return m;
             pendingScoresRef.current.delete(m.id);
-            return { ...m, ...buffered };
+            return {
+              ...m,
+              homeScore: buffered.homeScore,
+              awayScore: buffered.awayScore,
+              sportStats: buffered.stats ?? m.sportStats,
+            };
           });
           return [...prev, ...withBufferedScores];
         });
@@ -208,7 +220,11 @@ export function useMatchSocket() {
 
               if (!exists) {
                 // Match not loaded yet — buffer the score for later
-                pendingScoresRef.current.set(msg.matchId, msg.data);
+                pendingScoresRef.current.set(msg.matchId, {
+                  homeScore: msg.data.homeScore,
+                  awayScore: msg.data.awayScore,
+                  stats: msg.data.stats ?? null,
+                });
                 return prev;
               }
 
@@ -218,6 +234,7 @@ export function useMatchSocket() {
                       ...m,
                       homeScore: msg.data.homeScore,
                       awayScore: msg.data.awayScore,
+                      sportStats: msg.data.stats ?? m.sportStats,
                     }
                   : m,
               );

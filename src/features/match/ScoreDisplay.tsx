@@ -1,5 +1,5 @@
 import type { Match } from "../../types";
-import type { CricketStats } from "../../validation/sports";
+import { cricketStatsSchema, type CricketStats } from "../../validation/sports"
 
 interface CricketScoreDisplayProps {
     stats: CricketStats;
@@ -39,10 +39,11 @@ export function CricketScoreDisplay({
 
 export function ScoreDisplay({ match, side, pulse }: ScoreDisplayProps) {
     const score = side === "home" ? match.homeScore : match.awayScore;
+    const cricketStats = cricketStatsSchema.safeParse(match.sportStats);
 
-    if (match.sport === "cricket" && match.sportStats) {
+    if (match.sport === "cricket" && cricketStats.success) {
         return (
-            <CricketScoreDisplay stats={match.sportStats as CricketStats} side={side} />
+            <CricketScoreDisplay stats={cricketStats.data} side={side} />
         );
     }
 
