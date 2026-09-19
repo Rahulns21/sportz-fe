@@ -207,7 +207,14 @@ export function useMatchSocket() {
               if (prev.some((m) => m.id === msg.data.id)) return prev;
 
               const buffered = pendingScoresRef.current.get(msg.data.id);
-              const match = buffered ? { ...msg.data, ...buffered } : msg.data;
+              const match = buffered
+                ? {
+                    ...msg.data,
+                    homeScore: buffered.homeScore,
+                    awayScore: buffered.awayScore,
+                    sportStats: buffered.stats ?? msg.data.sportStats,
+                  }
+                : msg.data;
               if (buffered) pendingScoresRef.current.delete(msg.data.id);
 
               return [match, ...prev];
