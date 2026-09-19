@@ -10,6 +10,7 @@ export const matchSchema = z.object({
   endTime: z.string().nullable(),
   homeScore: z.number(),
   awayScore: z.number(),
+  sportStats: z.record(z.string(), z.unknown()).nullable().optional(),
   createdAt: z.string(),
   updatedAt: z.string(),
 });
