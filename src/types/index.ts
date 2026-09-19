@@ -10,6 +10,7 @@ export const matchSchema = z.object({
   endTime: z.string().nullable(),
   homeScore: z.number(),
   awayScore: z.number(),
+  sportStats: z.record(z.string(), z.unknown()).nullable().optional(),
   createdAt: z.string(),
   updatedAt: z.string(),
 });
@@ -48,6 +49,7 @@ export const serverMessageSchema = z.discriminatedUnion("type", [
       data: z.object({
         homeScore: z.number(),
         awayScore: z.number(),
+        stats: z.record(z.string(), z.unknown()).nullable().optional(),   // ← add this
       }),
     }),
 ]);

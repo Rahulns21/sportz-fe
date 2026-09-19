@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { Match } from "../../types";
+import { ScoreDisplay } from "./ScoreDisplay";
 
 interface MatchCardProps {
   match: Match;
@@ -88,22 +89,14 @@ export function MatchCard({
           <span className="text-brand-dark line-clamp-1 text-lg font-bold">
             {match.homeTeam}
           </span>
-          <span
-            className={`min-w-12 rounded-lg border border-black px-3 py-1 text-center text-2xl font-bold transition-colors ${homePulse ? "bg-brand-yellow animate-pulse" : "bg-gray-100"}`}
-          >
-            {match.homeScore}
-          </span>
+          <ScoreDisplay match={match} side="home" pulse={homePulse} />
         </div>
 
         <div className="flex items-center justify-between">
           <span className="text-brand-dark line-clamp-1 text-lg font-bold">
             {match.awayTeam}
           </span>
-          <span
-            className={`min-w-12 rounded-lg border border-black px-3 py-1 text-center text-2xl font-bold transition-colors ${awayPulse ? "bg-brand-yellow animate-pulse" : "bg-gray-100"}`}
-          >
-            {match.awayScore}
-          </span>
+          <ScoreDisplay match={match} side="away" pulse={awayPulse} />
         </div>
       </div>
 
